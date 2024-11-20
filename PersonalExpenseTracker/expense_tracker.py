@@ -1,9 +1,11 @@
 # Personal Expense Tracker
 
-import csv
+import csv, os
 
 # Variables
+
 all_expenses = []
+expenses_csv = "expenses.csv"
 
 # Add Expense Function
 def add_expense():
@@ -54,7 +56,7 @@ def track_budget():
         if budget < 0:
             print("Budget cannot be negative.")
         elif budget <= total_expenses:
-            print(f"You have exceeded your budget by ${round(total_expenses - budget, 2)}")
+            print(f"You have exceeded your budget by {round(total_expenses - budget, 2)}")
         elif budget == total_expenses:
             print("You mave met your budget.")
         else:
@@ -64,13 +66,24 @@ def track_budget():
         print("Please enter a valid number")
 
 # Save Expenses Function
+#%%
 def save_expenses():
 
     field_names = ["date", "category", "amount", "description"]
-    with open("expenses.csv", "w") as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=field_names)
-        writer.writeheader()
-        writer.writerows(all_expenses)
+
+    if not os.path.exists(expenses_csv):
+
+        with open(expenses_csv, "x") as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=field_names)
+            writer.writeheader()
+            writer.writerows(all_expenses)
+
+    else:
+
+        with open(expenses_csv, "w") as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=field_names)
+            writer.writeheader()
+            writer.writerows(all_expenses)
 
 # Load Expenses Function
 def load_expenses():
